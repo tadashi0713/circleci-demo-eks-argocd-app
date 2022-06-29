@@ -5,6 +5,20 @@ orbs: # Orbs
   github-cli: circleci/github-cli@2.0.0
   node: circleci/node@5.0.2
 
+jobs:
+  build_push_ecr:
+    machine:
+      docker_layer_caching: true # Docker Layer Caching
+      resource_class: large
+      image: ubuntu-2004:current
+    steps:
+      - checkout
+      - aws-ecr/build-and-push-image: # AWS ECR Orb
+          assume-web-identity: true
+          role-arn: arn:aws:iam::660990364978:role/tadashi_oidc_fargate
+          repo: tadashi-graviton-fargate-demo
+          tag: '${CIRCLE_SHA1}'
+
 workflows:
   test_and_deploy: 
     jobs:
@@ -14,11 +28,8 @@ workflows:
       - node/run:
           name: build
           npm-run: build
-      - aws-ecr/build-and-push-image:
-          assume-web-identity: true
-          role-arn: arn:aws:iam::660990364978:role/tadashi_oidc_fargate
-          platform: linux/amd64
-          repo: tadashi-graviton-fargate-demo
-          tag: '${CIRCLE_SHA1}'
-          context:
-            - aws-oidc-fargate
+      - build_push_ecr:
+          context: aws-oidc-fargate
+          filters:
+            branches:
+              only: master
