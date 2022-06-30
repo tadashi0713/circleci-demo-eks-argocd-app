@@ -15,7 +15,7 @@ jobs:
       - checkout
       - aws-ecr/build-and-push-image: # AWS ECR Orb
           assume-web-identity: true
-          role-arn: $AWS_ROLE_ARN
+          role-arn: arn:aws:iam::660990364978:role/tadashi_oidc_fargate
           repo: tadashi-eks-argocd-demo
           tag: '${CIRCLE_SHA1}'
 
