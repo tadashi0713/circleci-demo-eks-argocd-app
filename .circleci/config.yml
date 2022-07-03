@@ -21,7 +21,7 @@ jobs:
 
   create_release_pr:
     docker:
-      - image: k8s.gcr.io/kustomize/kustomize:v3.8.7
+      - image: cimg/base:2022.06
     steps:
       - github-cli/setup
       - github-cli/clone:
@@ -29,7 +29,9 @@ jobs:
       - run:
           name: Change image tag
           working_directory: base
-          command: kustomize edit set image circleci-demo-eks-argocd-app=660990364978.dkr.ecr.ap-northeast-1.amazonaws.com/tadashi-eks-argocd-demo:${CIRCLE_SHA1}
+          command: |
+            curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+            kustomize edit set image circleci-demo-eks-argocd-app=660990364978.dkr.ecr.ap-northeast-1.amazonaws.com/tadashi-eks-argocd-demo:${CIRCLE_SHA1}
 
 workflows:
   test_and_deploy: 
