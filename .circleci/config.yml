@@ -21,7 +21,7 @@ jobs:
 
   create_release_pr:
     docker:
-      - image: line/kubectl-kustomize:1.24.2-4.5.5
+      - image: k8s.gcr.io/kustomize/kustomize:v3.8.7
     steps:
       - github-cli/setup
       - github-cli/clone:
