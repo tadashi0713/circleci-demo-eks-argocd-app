@@ -1,6 +1,6 @@
 version: 2.1
 
-orbs: # Orbs
+orbs:
   aws-ecr: circleci/aws-ecr@8.1.2
   github-cli: circleci/github-cli@2.0.0
   node: circleci/node@5.0.2
@@ -8,12 +8,12 @@ orbs: # Orbs
 jobs:
   build_push_ecr:
     machine:
-      docker_layer_caching: true # Docker Layer Caching
+      docker_layer_caching: true
       resource_class: large
       image: ubuntu-2004:current
     steps:
       - checkout
-      - aws-ecr/build-and-push-image: # AWS ECR Orb
+      - aws-ecr/build-and-push-image:
           assume-web-identity: true
           role-arn: arn:aws:iam::660990364978:role/tadashi_oidc_fargate
           repo: tadashi-eks-argocd-demo
