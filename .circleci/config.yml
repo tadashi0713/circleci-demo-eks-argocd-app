@@ -19,6 +19,18 @@ jobs:
           repo: tadashi-eks-argocd-demo
           tag: '${CIRCLE_SHA1}'
 
+  create_release_pr:
+    docker:
+      - image: cimg/deploy:2022.06.1
+    steps:
+      - github-cli/setup
+      - github-cli/clone:
+          repo: git@github.com:tadashi0713/circleci-demo-eks-argocd-manifest.git
+      - run:
+          name: Change image tag
+          working_directory: base
+          command: kustomize edit set image circleci-demo-eks-argocd-app=660990364978.dkr.ecr.ap-northeast-1.amazonaws.com/tadashi-eks-argocd-demo:${CIRCLE_SHA1}
+
 workflows:
   test_and_deploy: 
     jobs:
@@ -33,3 +45,6 @@ workflows:
           filters:
             branches:
               only: master
+      - create_release_pr:
+          requires:
+            - build_push_ecr
