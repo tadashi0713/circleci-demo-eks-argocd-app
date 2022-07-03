@@ -21,7 +21,7 @@ jobs:
 
   create_release_pr:
     docker:
-      - image: cimg/deploy:2022.06.1
+      - image: line/kubectl-kustomize:1.24.2-4.5.5
     steps:
       - github-cli/setup
       - github-cli/clone:
