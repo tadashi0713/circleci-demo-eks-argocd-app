@@ -30,7 +30,6 @@ jobs:
           name: Change image tag
           working_directory: base
           command: |
-            curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
             ./kustomize edit set image circleci-demo-eks-argocd-app=${ECR_REPO}:${CIRCLE_SHA1:0:7}
       - add_ssh_keys:
           fingerprints:
